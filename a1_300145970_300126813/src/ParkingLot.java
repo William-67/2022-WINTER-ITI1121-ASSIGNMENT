@@ -137,7 +137,7 @@ public class ParkingLot {
 		if (c.getType() == CarType.LARGE && lotDesign[i][j]!= CarType.LARGE){
 			return false;
 		}
-		return true; // REMOVE THIS STATEMENT AFTER IMPLEMENTING THIS METHOD
+		return true;
 
 	}
 
