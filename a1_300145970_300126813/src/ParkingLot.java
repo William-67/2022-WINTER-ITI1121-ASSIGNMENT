@@ -93,6 +93,9 @@ public class ParkingLot {
 	 */
 	public Car remove(int i, int j) {
 		// WRITE YOUR CODE HERE!
+		if (i>=numRows || j>= numSpotsPerRow || occupancy[i][j]==null){
+			return null;
+		}
 		Car car = occupancy[i][j];
 		occupancy[i][j] = null;
 		return car;
@@ -156,7 +159,6 @@ public class ParkingLot {
 			}
 		}
 		return capacity;
-
 	}
 
 	/**
