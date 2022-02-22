@@ -49,21 +49,13 @@ public class ParkingLot {
 			return;
 		}
 
-		// determine numRows and numSpotsPerRow; you can do so by
-		// writing your own code or alternatively completing the 
-		// private calculateLotDimensions(...) that I have provided
-		numRows = 0;
-		numSpotsPerRow = 0;
+		// determine numRows and numSpotsPerRow
 		calculateLotDimensions(strFilename);
 
-		// instantiate the lotDesign and occupancy variables!
-		// WRITE YOUR CODE HERE!
 		lotDesign = new CarType[numRows][numSpotsPerRow];
+
 		occupancy = new Car[numRows][numSpotsPerRow];
 
-		// populate lotDesign and occupancy; you can do so by
-		// writing your own code or alternatively completing the 
-		// private populateFromFile(...) that I have provided
 		populateFromFile(strFilename);
 	}
 
@@ -75,12 +67,12 @@ public class ParkingLot {
 	 * @param c is the car to be parked
 	 */
 	public void park(int i, int j, Car c) {
-		// WRITE YOUR CODE HERE!
-		if (canParkAt(i,j,c)){
-			occupancy[i][j] = c;
-		}else{
-			System.out.println("Car "+ c.toString() + " cannot be parked at ("+ i + "," + j+")");
+		if (!canParkAt(i, j, c)) {
+			System.out.println("Car " + c + " cannot be parked at (" + i + "," + j + ")");
+			return;
 		}
+
+		occupancy[i][j] = c;
 	}
 
 	/**
@@ -92,13 +84,16 @@ public class ParkingLot {
 	 *         of range, or when there is no car parked at (i, j)
 	 */
 	public Car remove(int i, int j) {
-		// WRITE YOUR CODE HERE!
-		if (i>=numRows || j>= numSpotsPerRow || occupancy[i][j]==null){
+
+		if (i >= numRows || j >= numSpotsPerRow) {
+			System.out.println("Out of range index error.");
 			return null;
 		}
-		Car car = occupancy[i][j];
+
+		Car c = occupancy[i][j];
 		occupancy[i][j] = null;
-		return car;
+
+		return c;
 
 	}
 
@@ -111,37 +106,32 @@ public class ParkingLot {
 	 * @return true if car c can park at (i, j) and false otherwise
 	 */
 	public boolean canParkAt(int i, int j, Car c) {
-		// WRITE YOUR CODE HERE!
 
-		// out of bound case
-		if (i>=numRows || j>= numSpotsPerRow){
-			return false;
-		}
-		// NA case
-		if (lotDesign[i][j] == CarType.NA){
+		if (i >= numRows || j >= numSpotsPerRow) {
 			return false;
 		}
 
-		// one car case
-		if (occupancy[i][j] != null){
+		if (occupancy[i][j] != null) {
 			return false;
 		}
-		// electric car can park at any position except for NA, so no special case need to be written
 
-		// small car case
-		if (c.getType() == CarType.SMALL && lotDesign[i][j]==CarType.ELECTRIC){
-			return false;
-		}
-		// regular carcase
-		if (c.getType() == CarType.REGULAR &&(lotDesign[i][j]==CarType.ELECTRIC || lotDesign[i][j] == CarType.SMALL)){
-			return false;
-		}
-		// large car case
-		if (c.getType() == CarType.LARGE && lotDesign[i][j]!= CarType.LARGE){
-			return false;
-		}
-		return true;
+		CarType carType = c.getType();
+		CarType spotType = lotDesign[i][j];
 
+		if (carType == CarType.ELECTRIC) {
+			return (spotType == CarType.ELECTRIC) || (spotType == CarType.SMALL) || (spotType == CarType.REGULAR)
+					|| (spotType == CarType.LARGE);
+
+		} else if (carType == CarType.SMALL) {
+			return (spotType == CarType.SMALL) || (spotType == CarType.REGULAR) || (spotType == CarType.LARGE);
+
+		} else if (carType == CarType.REGULAR) {
+			return (spotType == CarType.REGULAR) || (spotType == CarType.LARGE);
+		} else if (carType == CarType.LARGE) {
+			return (spotType == CarType.LARGE);
+		}
+
+		return false;
 	}
 
 	/**
@@ -149,16 +139,14 @@ public class ParkingLot {
 	 *         used for parking (i.e., excluding spots that point to CarType.NA)
 	 */
 	public int getTotalCapacity() {
-		// WRITE YOUR CODE HERE!
-		int capacity = 0;
-		for (int i =0; i<numRows;i++){
-			for (int j =0; j< numSpotsPerRow;j++){
-				if (!(lotDesign[i][j] == CarType.NA)){
-					capacity++;
-				}
-			}
-		}
-		return capacity;
+		int count = 0;
+
+		for (int i = 0; i < numRows; i++)
+			for (int j = 0; j < numSpotsPerRow; j++)
+				if (lotDesign[i][j] != CarType.NA)
+					count++;
+
+		return count;
 	}
 
 	/**
@@ -166,47 +154,14 @@ public class ParkingLot {
 	 *         cars parked in the lot)
 	 */
 	public int getTotalOccupancy() {
-		// WRITE YOUR CODE HERE!
-		int numOfParking = 0;
-		for (int i =0; i<numRows;i++){
-			for (int j =0; j< numSpotsPerRow;j++){
-				if (occupancy[i][j] != null){
-					numOfParking++;
-				}
-			}
-		}
-		return numOfParking;
-	}
+		int count = 0;
 
-	/**
-	 * A private method added
-	 * @param str
-	 * @return the list of string separate by comma
-	 */
-	private String[] splitTheLine(String str){
-		return str.split(SEPARATOR);
-	}
+		for (int i = 0; i < numRows; i++)
+			for (int j = 0; j < numSpotsPerRow; j++)
+				if (occupancy[i][j] != null)
+					count++;
 
-	/**
-	 * private method added
-	 * @param str
-	 * @return a new string without any spaces
-	 */
-	private String deleteAllSpaces(String str){
-		return str.replaceAll(" ","");
-	}
-
-	/**
-	 * private method added
-	 * @param strings
-	 * @return a list of cartype base on a list string
-	 */
-	private CarType[] switchToCarType(String[] strings){
-		CarType[] carTypes = new CarType[strings.length];
-		for (int i =0; i<strings.length;i++){
-			carTypes[i] = Util.getCarTypeByLabel(strings[i]);
-		}
-		return carTypes;
+		return count;
 	}
 
 	private void calculateLotDimensions(String strFilename) throws Exception {
@@ -214,16 +169,17 @@ public class ParkingLot {
 		Scanner scanner = new Scanner(new File(strFilename));
 
 		while (scanner.hasNext()) {
-			String str = scanner.nextLine();
-			// WRITE YOUR CODE HERE!
-			if (str.equals(SECTIONER)){
-				break;
-			}
-			if (!str.equals("")){
-				numSpotsPerRow = splitTheLine(str).length;
-				numRows++;
-			}
+			String str = scanner.nextLine().trim();
 
+			if (str.isEmpty()) {
+				// Do nothing
+			} else if (str.equals(SECTIONER)) {
+				break;
+			} else {
+				numRows++;
+				String[] tokens = str.split(SEPARATOR);
+				numSpotsPerRow = Integer.max(tokens.length, numSpotsPerRow);
+			}
 		}
 
 		scanner.close();
@@ -233,45 +189,63 @@ public class ParkingLot {
 
 		Scanner scanner = new Scanner(new File(strFilename));
 
-		// YOU MAY NEED TO DEFINE SOME LOCAL VARIABLES HERE!
-		int counter = 0;
+		int lineCount = 0;
+
+		int rowNumber = 0;
+
 		// while loop for reading the lot design
 		while (scanner.hasNext()) {
-			String str = scanner.nextLine();
-			// WRITE YOUR CODE HERE!
-			if (str.equals(SECTIONER)){
+			String str = scanner.nextLine().trim();
+			lineCount++;
+
+			if (str.isEmpty()) {
+				// Do nothing
+			} else if (str.equals(SECTIONER)) {
 				break;
-			}
-			if (!str.equals("")){
-				lotDesign[counter++] = switchToCarType(splitTheLine(deleteAllSpaces(str)));
+			} else {
+				String[] tokens = str.split(",");
+				for (int i = 0; i < tokens.length; i++)
+					lotDesign[rowNumber][i] = Util.getCarTypeByLabel(tokens[i].trim());
+				rowNumber++;
 			}
 		}
 
+		rowNumber = 0;
 		// while loop for reading occupancy data
 		while (scanner.hasNext()) {
-			String str = scanner.nextLine();
-			// WRITE YOUR CODE HERE!
-			if (!str.equals("")){
-				String[] temp = splitTheLine(deleteAllSpaces(str));
-				Car car = new Car(Util.getCarTypeByLabel(temp[2]),temp[3]);
-				int i = Integer.parseInt(temp[0]);
-				int j = Integer.parseInt(temp[1]);
-				park(i,j,car);
-			}
+			String str = scanner.nextLine().trim();
+			lineCount++;
 
+			if (str.isEmpty()) {
+				// Do nothing
+			} else {
+				String[] tokens = str.split(SEPARATOR);
+				if (tokens.length != 4 || !tokens[0].trim().matches("\\d+") || !tokens[1].trim().matches("\\d+")) {
+					System.out.println("Skipped line " + lineCount + " due to an error.");
+					continue;
+				}
+
+				int i = Integer.parseInt(tokens[0].trim());
+				int j = Integer.parseInt(tokens[1].trim());
+
+				if (Util.getCarTypeByLabel(tokens[2].trim()) == CarType.NA) {
+					System.out.println("Skipped line " + lineCount + " due to an error.");
+					continue;
+				}
+
+				Car c = new Car(Util.getCarTypeByLabel(tokens[2].trim()), tokens[3].trim());
+				this.park(i, j, c);
+				rowNumber++;
+			}
 		}
 
 		scanner.close();
 	}
 
 	/**
-	 * Produce string representation of the parking lot
-	 * 
 	 * @return String containing the parking lot information
 	 */
 	public String toString() {
-		// NOTE: The implementation of this method is complete. You do NOT need to
-		// change it for the assignment.
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("==== Lot Design ====").append(System.lineSeparator());
 
