@@ -10,13 +10,14 @@ public class Spot {
 
 		// WRITE YOUR CODE HERE!
 
-		return null; // Remove this statement when your implementation is complete.
+		return car;
 
 	}
 
 	public void setCar(Car car) {
 	
 		// WRITE YOUR CODE HERE!
+		this.car = car;
 	
 	}
 
@@ -24,19 +25,22 @@ public class Spot {
 	
 		// WRITE YOUR CODE HERE!
 		
-		return -1; // Remove this statement when your implementation is complete.
+		return timestamp;
 
 	}
 
 	public void setTimestamp(int timestamp) {
 
 		// WRITE YOUR CODE HERE!
+		this.timestamp = timestamp;
 		
 	}
 
 	public Spot(Car car, int timestamp) {
 
 		// WRITE YOUR CODE HERE!
+		this.car = car;
+		this.timestamp = timestamp;
 		
 	}
 

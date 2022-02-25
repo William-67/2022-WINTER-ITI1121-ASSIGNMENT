@@ -11,12 +11,6 @@ public class ParkingLot {
 	private static final String SEPARATOR = ",";
 
 	/**
-	 * The delimiter that separates the parking lot design section from the parked
-	 * car data section
-	 */
-	private static final String SECTIONER = "###";
-
-	/**
 	 * Instance variable for storing the number of rows in a parking lot
 	 */
 	private int numRows;
@@ -35,7 +29,7 @@ public class ParkingLot {
 	 * Instance variable (two-dimensional array) for storing occupancy information
 	 * for the spots in the lot
 	 */
-	private Car[][] occupancy;
+	private Spot[][] occupancy;
 
 	/**
 	 * Constructs a parking lot by loading a file
@@ -44,35 +38,45 @@ public class ParkingLot {
 	 */
 	public ParkingLot(String strFilename) throws Exception {
 
+		// WRITE YOUR CODE HERE!
 		if (strFilename == null) {
 			System.out.println("File name cannot be null.");
 			return;
 		}
-
-		// determine numRows and numSpotsPerRow
+		numRows = 0;
 		calculateLotDimensions(strFilename);
 
 		lotDesign = new CarType[numRows][numSpotsPerRow];
-
-		occupancy = new Car[numRows][numSpotsPerRow];
-
+		occupancy = new Spot[numRows][numSpotsPerRow];
 		populateFromFile(strFilename);
+
+	}
+
+	public int getNumRows() {
+		return numRows;
+	}
+
+	public int getNumSpotsPerRow() {
+		return numSpotsPerRow;
 	}
 
 	/**
 	 * Parks a car (c) at a give location (i, j) within the parking lot.
 	 * 
-	 * @param i is the parking row index
-	 * @param j is the index of the spot within row i
-	 * @param c is the car to be parked
+	 * @param i         is the parking row index
+	 * @param j         is the index of the spot within row i
+	 * @param c         is the car to be parked
+	 * @param timestamp is the (simulated) time when the car gets parked in the lot
 	 */
-	public void park(int i, int j, Car c) {
+	public void park(int i, int j, Car c, int timestamp) {
+
+		// WRITE YOUR CODE HERE!
 		if (!canParkAt(i, j, c)) {
 			System.out.println("Car " + c + " cannot be parked at (" + i + "," + j + ")");
 			return;
 		}
-
-		occupancy[i][j] = c;
+		Spot s = new Spot(c,timestamp);
+		occupancy[i][j] = s;
 	}
 
 	/**
@@ -80,17 +84,17 @@ public class ParkingLot {
 	 * 
 	 * @param i is the parking row index
 	 * @param j is the index of the spot within row i
-	 * @return the car removed; the method returns null when either i or j are out
+	 * @return the spot removed; the method returns null when either i or j are out
 	 *         of range, or when there is no car parked at (i, j)
 	 */
-	public Car remove(int i, int j) {
+	public Spot remove(int i, int j) {
 
+		// WRITE YOUR CODE HERE!
 		if (i >= numRows || j >= numSpotsPerRow) {
 			System.out.println("Out of range index error.");
 			return null;
 		}
-
-		Car c = occupancy[i][j];
+		Spot c = occupancy[i][j];
 		occupancy[i][j] = null;
 
 		return c;
@@ -98,8 +102,23 @@ public class ParkingLot {
 	}
 
 	/**
+	 * Returns the spot instance at a given position (i, j)
+	 * 
+	 * @param i is the parking row index
+	 * @param j is the index of the spot within row i
+	 * @return the spot instance at position (i, j)
+	 */
+	public Spot getSpotAt(int i, int j) {
+
+		// WRITE YOUR CODE HERE!
+		return occupancy[i][j]!=null ?occupancy[i][j] : null;
+	}
+
+	/**
 	 * Checks whether a car (which has a certain type) is allowed to park at
 	 * location (i, j)
+	 *
+	 * NOTE: This method is complete; you do not need to change it.
 	 * 
 	 * @param i is the parking row index
 	 * @param j is the index of the spot within row i
@@ -135,6 +154,33 @@ public class ParkingLot {
 	}
 
 	/**
+	 * Attempts to park a car in the lot. Parking is successful if a suitable parking spot
+	 * is available in the lot. If some suitable spot is found (anywhere in the lot), the car
+	 * is parked at that spot with the indicated timestamp and the method returns "true".
+	 * If no suitable spot is found, no parking action is taken and the method simply returns
+	 * "false"
+	 * 
+	 * @param c is the car to be parked
+	 * @param timestamp is the simulation time at which parking is attempted for car c 
+	 * @return true if c is successfully parked somwhere in the lot, and false otherwise
+	 */
+	public boolean attemptParking(Car c, int timestamp) {
+
+		// WRITE YOUR CODE HERE!
+		for (int i = 0;i<numRows;i++){
+			for (int j = 0; j<numSpotsPerRow;j++){
+				if (canParkAt(i,j,c)){
+					park(i,j,c,timestamp);
+					return true;
+				}
+			}
+		}
+		
+		return false; // Remove this statement when your implementation is complete.
+
+	}
+
+	/**
 	 * @return the total capacity of the parking lot excluding spots that cannot be
 	 *         used for parking (i.e., excluding spots that point to CarType.NA)
 	 */
@@ -150,8 +196,7 @@ public class ParkingLot {
 	}
 
 	/**
-	 * @return the total occupancy of the parking lot (i.e., the total number of
-	 *         cars parked in the lot)
+	 * @return the total occupancy of the parking lot
 	 */
 	public int getTotalOccupancy() {
 		int count = 0;
@@ -173,9 +218,7 @@ public class ParkingLot {
 
 			if (str.isEmpty()) {
 				// Do nothing
-			} else if (str.equals(SECTIONER)) {
-				break;
-			} else {
+			}else {
 				numRows++;
 				String[] tokens = str.split(SEPARATOR);
 				numSpotsPerRow = Integer.max(tokens.length, numSpotsPerRow);
@@ -184,6 +227,7 @@ public class ParkingLot {
 
 		scanner.close();
 	}
+
 
 	private void populateFromFile(String strFilename) throws Exception {
 
@@ -200,49 +244,19 @@ public class ParkingLot {
 
 			if (str.isEmpty()) {
 				// Do nothing
-			} else if (str.equals(SECTIONER)) {
-				break;
-			} else {
+			}
+			else {
 				String[] tokens = str.split(",");
 				for (int i = 0; i < tokens.length; i++)
 					lotDesign[rowNumber][i] = Util.getCarTypeByLabel(tokens[i].trim());
 				rowNumber++;
 			}
 		}
-
-		rowNumber = 0;
-		// while loop for reading occupancy data
-		while (scanner.hasNext()) {
-			String str = scanner.nextLine().trim();
-			lineCount++;
-
-			if (str.isEmpty()) {
-				// Do nothing
-			} else {
-				String[] tokens = str.split(SEPARATOR);
-				if (tokens.length != 4 || !tokens[0].trim().matches("\\d+") || !tokens[1].trim().matches("\\d+")) {
-					System.out.println("Skipped line " + lineCount + " due to an error.");
-					continue;
-				}
-
-				int i = Integer.parseInt(tokens[0].trim());
-				int j = Integer.parseInt(tokens[1].trim());
-
-				if (Util.getCarTypeByLabel(tokens[2].trim()) == CarType.NA) {
-					System.out.println("Skipped line " + lineCount + " due to an error.");
-					continue;
-				}
-
-				Car c = new Car(Util.getCarTypeByLabel(tokens[2].trim()), tokens[3].trim());
-				this.park(i, j, c);
-				rowNumber++;
-			}
-		}
-
 		scanner.close();
 	}
 
 	/**
+	 * NOTE: This method is complete; you do not need to change it.
 	 * @return String containing the parking lot information
 	 */
 	public String toString() {
@@ -271,35 +285,5 @@ public class ParkingLot {
 
 		}
 		return buffer.toString();
-	}
-
-	/**
-	 * <b>main</b> of the application. The method first reads from the standard
-	 * input the name of the file to process. Next, it creates an instance of
-	 * ParkingLot. Finally, it prints to the standard output information about the
-	 * instance of the ParkingLot just created.
-	 * 
-	 * @param args command lines parameters (not used in the body of the method)
-	 * @throws Exception
-	 */
-
-	public static void main(String args[]) throws Exception {
-
-		StudentInfo.display();
-
-		System.out.print("Please enter the name of the file to process: ");
-
-		Scanner scanner = new Scanner(System.in);
-
-		String strFilename = scanner.nextLine();
-
-		ParkingLot lot = new ParkingLot(strFilename);
-
-		System.out.println("Total number of parkable spots (capacity): " + lot.getTotalCapacity());
-
-		System.out.println("Number of cars currently parked in the lot: " + lot.getTotalOccupancy());
-
-		System.out.print(lot);
-
 	}
 }

@@ -5,6 +5,12 @@ import java.util.Scanner;
 
 public class Test {
 
+    private int a;
+    public void add(){
+        a++;
+        System.out.println(a);
+    }
+
     public static void doTheTest(String strFilename) throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(strFilename));
         int num = 0;
@@ -37,10 +43,12 @@ public class Test {
 //        String strFilename = scanner.nextLine();
 //        doTheTest(strFilename);
 
-        String[][] a= new String[4][5];
-        String[] b = new String[]{"tom","janne","ben","idot","will"};
-        a[1] = b;
-        System.out.println(Arrays.deepToString(a));
+//        String[][] a= new String[4][5];
+//        String[] b = new String[]{"tom","janne","ben","idot","will"};
+//        a[1] = b;
+//        System.out.println(Arrays.deepToString(a));
+        System.out.println();
+
 
 
 
