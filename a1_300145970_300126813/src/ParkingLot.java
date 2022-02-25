@@ -98,7 +98,6 @@ public class ParkingLot {
 		occupancy[i][j] = null;
 
 		return c;
-
 	}
 
 	/**
@@ -167,16 +166,33 @@ public class ParkingLot {
 	public boolean attemptParking(Car c, int timestamp) {
 
 		// WRITE YOUR CODE HERE!
+		//local variables defined to record every available spot and optimize it.
+		Queue<Integer> row = new LinkedQueue<>();
+		Queue<Integer> col = new LinkedQueue<>();
+
 		for (int i = 0;i<numRows;i++){
 			for (int j = 0; j<numSpotsPerRow;j++){
 				if (canParkAt(i,j,c)){
-					park(i,j,c,timestamp);
-					return true;
+					if (lotDesign[i][j] == c.getType()){
+						park(i,j,c,timestamp);
+						return true;
+					}else{
+						row.enqueue(i);
+						col.enqueue(j);
+					}
 				}
 			}
 		}
-		
-		return false; // Remove this statement when your implementation is complete.
+
+
+		if (!row.isEmpty()){
+			int i = row.dequeue();
+			int j = col.dequeue();
+			park(i,j,c,timestamp);
+			return true;
+		}
+
+		return false;
 
 	}
 

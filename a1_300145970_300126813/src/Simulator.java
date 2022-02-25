@@ -76,15 +76,17 @@ public class Simulator {
 		// Hint: you are being given a perHourArrivalRate. 
 		// All you need to do is to convert this hourly rate into 
 		// a per-second rate (probability).
+
 		
 		//this.probabilityOfArrivalPerSec = new Rational(?, ?);
-
+		this.probabilityOfArrivalPerSec = new Rational(perHourArrivalRate,3600);
 		
 		// Finally, you need to initialize the incoming and outgoing queues
 
 		// incomingQueue = new ...
 		// outgoingQueue = new ...
-
+		incomingQueue = new LinkedQueue<>();
+		outgoingQueue = new LinkedQueue<>();
 	}
 
 	/**
@@ -95,6 +97,7 @@ public class Simulator {
 	public void simulate() {
 	
 		// Local variables can be defined here.
+		Spot priority = null;
 
 		this.clock = 0;
 		// Note that for the specific purposes of A2, clock could have been 
@@ -103,6 +106,46 @@ public class Simulator {
 		while (clock < steps) {
 	
 			// WRITE YOUR CODE HERE!
+
+			if (RandomGenerator.eventOccurred(probabilityOfArrivalPerSec)){
+				Car car = RandomGenerator.generateRandomCar();
+				incomingQueue.enqueue(new Spot(car,clock));
+			}
+			for (int i = 0;i<lot.getNumRows();i++){
+				for (int j = 0;j<lot.getNumSpotsPerRow();j++){
+					Spot spot = lot.getSpotAt(i,j);
+					if (spot!=null){
+						int duration =clock-spot.getTimestamp();
+						if (duration==MAX_PARKING_DURATION){
+							lot.remove(i,j);
+							outgoingQueue.enqueue(spot);
+						}else{
+							if (RandomGenerator.eventOccurred(departurePDF.pdf(duration))){
+								lot.remove(i,j);
+								outgoingQueue.enqueue(spot);
+							}
+						}
+					}
+				}
+			}
+			if (!incomingQueue.isEmpty() && priority==null){
+				 priority= incomingQueue.dequeue();
+			}
+			if (priority!=null){
+				if (lot.attemptParking(priority.getCar(),clock)){
+					System.out.println(priority.getCar() + " ENTERED at timestep " + clock + "; occupancy is at " +
+							lot.getTotalOccupancy()
+					);
+					priority = null;
+				}
+			}
+
+			if (!outgoingQueue.isEmpty()){
+				Spot out = outgoingQueue.dequeue();
+				System.out.println(out.getCar() + " EXITED at timestep " + clock + "; occupancy is at " +
+						lot.getTotalOccupancy()
+				);
+			}
 
 			clock++;
 		}

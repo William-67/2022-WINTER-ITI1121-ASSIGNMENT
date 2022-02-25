@@ -47,7 +47,9 @@ public class Test {
 //        String[] b = new String[]{"tom","janne","ben","idot","will"};
 //        a[1] = b;
 //        System.out.println(Arrays.deepToString(a));
-        System.out.println();
+        int a = 50;
+        double b = a%35;
+        System.out.println(b);
 
 
 
