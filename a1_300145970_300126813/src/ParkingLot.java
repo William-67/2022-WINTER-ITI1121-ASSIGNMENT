@@ -167,8 +167,8 @@ public class ParkingLot {
 
 		// WRITE YOUR CODE HERE!
 		//local variables defined to record every available spot and optimize it.
-		Queue<Integer> row = new LinkedQueue<>();
-		Queue<Integer> col = new LinkedQueue<>();
+		int row =-1;
+		int col =-1;
 
 		for (int i = 0;i<numRows;i++){
 			for (int j = 0; j<numSpotsPerRow;j++){
@@ -177,18 +177,17 @@ public class ParkingLot {
 						park(i,j,c,timestamp);
 						return true;
 					}else{
-						row.enqueue(i);
-						col.enqueue(j);
+						if (row==-1){
+							row=i;
+							col=j;
+						}
 					}
 				}
 			}
 		}
 
-
-		if (!row.isEmpty()){
-			int i = row.dequeue();
-			int j = col.dequeue();
-			park(i,j,c,timestamp);
+		if (row!=-1){
+			park(row,col,c,timestamp);
 			return true;
 		}
 
