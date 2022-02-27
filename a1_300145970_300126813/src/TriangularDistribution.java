@@ -26,9 +26,16 @@ public class TriangularDistribution {
 	public TriangularDistribution(int a, int c, int b) {
 	
 		// WRITE YOUR CODE HERE!
-		this.a = a;
-		this.b = b;
-		this.c = c;
+		if (a<c && c<b){
+			this.a = a;
+			this.b = b;
+			this.c = c;
+		}
+		else{
+			this.a = 0;
+			this.b = 0;
+			this.c = 0;
+		}
 
 	}
 
