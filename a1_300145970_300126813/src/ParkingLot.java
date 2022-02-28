@@ -163,6 +163,8 @@ public class ParkingLot {
 	 * @param timestamp is the simulation time at which parking is attempted for car c 
 	 * @return true if c is successfully parked somwhere in the lot, and false otherwise
 	 */
+
+	// This is the version with optimization
 	public boolean attemptParking(Car c, int timestamp) {
 
 		// WRITE YOUR CODE HERE!
@@ -192,8 +194,24 @@ public class ParkingLot {
 		}
 
 		return false;
-
 	}
+
+	//This is also attemptParking, without optimization
+
+//	public boolean attemptParking(Car c, int timestamp) {
+//
+//		// WRITE YOUR CODE HERE!
+//		//local variables defined to record every available spot and optimize it.
+//		for (int i = 0;i<numRows;i++){
+//			for (int j = 0; j<numSpotsPerRow;j++){
+//				if (canParkAt(i,j,c)){
+//					park(i,j,c,timestamp);
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
 	/**
 	 * @return the total capacity of the parking lot excluding spots that cannot be
