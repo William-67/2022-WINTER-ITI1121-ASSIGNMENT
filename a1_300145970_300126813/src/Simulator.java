@@ -99,6 +99,7 @@ public class Simulator {
 		// Local variables can be defined here.
 		Spot priority = null;
 
+		
 		this.clock = 0;
 		// Note that for the specific purposes of A2, clock could have been 
 		// defined as a local variable too.
