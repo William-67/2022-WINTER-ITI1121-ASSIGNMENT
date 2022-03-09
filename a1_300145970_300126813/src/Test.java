@@ -57,7 +57,11 @@ public class Test {
         list.add("ad");
         list.add("aha");
         list.add("ah");
-        System.out.println(list.get(3));
+        int i = 0;
+        while (i< list.size()){
+            list.remove(i);
+            System.out.println(list.toString());
+        }
 
 
 

@@ -97,17 +97,18 @@ public class Simulator {
 				Car car = RandomGenerator.generateRandomCar();
 				incomingQueue.enqueue(new Spot(car,clock));
 			}
-			for (int i = 0;i<lot.getOccupancy();i++){
+			int i = 0;
+			while (i<lot.getOccupancy()){
 				Spot spot = lot.getSpotAt(i);
 				int duration = clock-spot.getTimestamp();
 				if (duration==MAX_PARKING_DURATION){
 					lot.remove(i);
 					outgoingQueue.enqueue(spot);
-				}else{
-					if (RandomGenerator.eventOccurred(departurePDF.pdf(duration))){
-						lot.remove(i);
-						outgoingQueue.enqueue(spot);
-					}
+				}else if (RandomGenerator.eventOccurred(departurePDF.pdf(duration))){
+					lot.remove(i);
+					outgoingQueue.enqueue(spot);
+				}else {
+					i++;
 				}
 			}
 			if (!incomingQueue.isEmpty()){
@@ -121,7 +122,7 @@ public class Simulator {
 			}
 			clock++;
 		}
-	
+
 	}
 
 	public int getIncomingQueueSize() {

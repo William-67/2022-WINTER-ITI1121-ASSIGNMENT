@@ -54,7 +54,7 @@ public class ParkingLot {
 	 * @return the car (spot) that has been removed
 	 */
 	public Spot remove(int i) {
-		if (i>=getOccupancy()){
+		if (i>=getOccupancy()|i<0){
 			throw new IndexOutOfBoundsException("Number of car is less than i");
 		}
 		Spot spot = occupancy.get(i);
@@ -88,7 +88,7 @@ public class ParkingLot {
 	 * @return the spot instance at a given position (i, j)
 	 */
 	public Spot getSpotAt(int i) {
-		if (i>=getOccupancy()){
+		if (i>=getOccupancy()|i<0){
 			throw new IndexOutOfBoundsException("Number of car is less than i");
 		}
 		Spot spot = occupancy.get(i);
