@@ -7,6 +7,10 @@
  * 
  */
 
+// TODO:
+// 1) keep track of size and implement a size() method
+// 2) write a peek method
+
 public class LinkedQueue<D> implements Queue<D> {
 
 	private static class Elem<T> {
@@ -63,7 +67,28 @@ public class LinkedQueue<D> implements Queue<D> {
 		} else {
 			front = front.next;
 		}
+
 		return returnedValue;
+	}
+
+	public D peek() {
+		if (isEmpty()){
+			throw new IllegalStateException("Empty Queue!");
+		}
+		return front.value;
+	}
+
+	public int size() {
+		if (isEmpty()){
+			return 0;
+		}
+		int s = 1;
+		Elem<D> tmp = front;
+		while (tmp.next!=null){
+			s++;
+			tmp = tmp.next;
+		}
+		return s;
 	}
 
 	public String toString() {

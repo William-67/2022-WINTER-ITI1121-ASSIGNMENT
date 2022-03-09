@@ -47,9 +47,12 @@ public class Test {
 //        String[] b = new String[]{"tom","janne","ben","idot","will"};
 //        a[1] = b;
 //        System.out.println(Arrays.deepToString(a));
-        int a = 50;
-        double b = a%35;
-        System.out.println(b);
+//        int a = 50;
+//        double b = a%35;
+//        System.out.println(b);
+        List<String> list = new SinglyLinkedList<>();
+        list.add("ahasd");
+        System.out.println(list.get(5));
 
 
 
