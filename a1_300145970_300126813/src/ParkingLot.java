@@ -88,7 +88,7 @@ public class ParkingLot {
 	 * @return the spot instance at a given position (i, j)
 	 */
 	public Spot getSpotAt(int i) {
-		if (i>getOccupancy()){
+		if (i>=getOccupancy()){
 			throw new IndexOutOfBoundsException("Number of car is less than i");
 		}
 		Spot spot = occupancy.get(i);

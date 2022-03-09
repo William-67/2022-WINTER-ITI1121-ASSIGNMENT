@@ -92,12 +92,39 @@ public class Simulator {
 	 */
 	public void simulate() {
 		this.clock = 0;
+		while (clock<steps){
+			if (RandomGenerator.eventOccurred(probabilityOfArrivalPerSec)){
+				Car car = RandomGenerator.generateRandomCar();
+				incomingQueue.enqueue(new Spot(car,clock));
+			}
+			for (int i = 0;i<lot.getOccupancy();i++){
+				Spot spot = lot.getSpotAt(i);
+				int duration = clock-spot.getTimestamp();
+				if (duration==MAX_PARKING_DURATION){
+					lot.remove(i);
+					outgoingQueue.enqueue(spot);
+				}else{
+					if (RandomGenerator.eventOccurred(departurePDF.pdf(duration))){
+						lot.remove(i);
+						outgoingQueue.enqueue(spot);
+					}
+				}
+			}
+			if (!incomingQueue.isEmpty()){
+				Spot priority = incomingQueue.peek();
+				if (lot.attemptParking(priority.getCar(), priority.getTimestamp())){
+					incomingQueue.dequeue();
+				}
+			}
+			if (!outgoingQueue.isEmpty()){
+				outgoingQueue.dequeue();
+			}
+			clock++;
+		}
 	
 	}
 
 	public int getIncomingQueueSize() {
-	
-		throw new UnsupportedOperationException("This method has not been implemented yet!");
-	
+		return incomingQueue.size();
 	}
 }

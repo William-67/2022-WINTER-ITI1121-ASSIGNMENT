@@ -48,11 +48,16 @@ public class Test {
 //        a[1] = b;
 //        System.out.println(Arrays.deepToString(a));
 //        int a = 50;
-//        double b = a%35;
-//        System.out.println(b);
+//        double THRESHOLD = 5.0d;
+//        double c = (double) a/35;
+//        System.out.println(THRESHOLD);
+//        System.out.println(c);
         List<String> list = new SinglyLinkedList<>();
         list.add("ahasd");
-        System.out.println(list.get(5));
+        list.add("ad");
+        list.add("aha");
+        list.add("ah");
+        System.out.println(list.get(3));
 
 
 
