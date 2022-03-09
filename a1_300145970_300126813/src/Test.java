@@ -57,11 +57,33 @@ public class Test {
         list.add("ad");
         list.add("aha");
         list.add("ah");
-        int i = 0;
-        while (i< list.size()){
-            list.remove(i);
-            System.out.println(list.toString());
+//        int i = 0;
+//        while (i< list.size()){
+//            list.remove(i);
+//            System.out.println(list.toString());
+//        }
+
+        ParkingLot lot = new ParkingLot(50);
+        Car car = new Car(CarType.SMALL,"abc");
+        for (int i =0;i<55;i++){
+            if (lot.attemptParking(car,i)){
+                System.out.println("1");
+            }else {
+                System.out.println("0");
+            }
+
         }
+        lot = new ParkingLot(50);
+        car = new Car(CarType.SMALL,"abc");
+        for (int i =0;i<55;i++){
+            if (lot.attemptParking(car,i)){
+                System.out.println("1");
+            }else {
+                System.out.println("0");
+            }
+
+        }
+
 
 
 

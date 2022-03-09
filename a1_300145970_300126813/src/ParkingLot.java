@@ -66,11 +66,12 @@ public class ParkingLot {
 		if (c==null){
 			throw new NullPointerException("Can not park an empty car");
 		}
-		if (occupancy.size()==getCapacity()){
-			return false;
+		if (getOccupancy()<=getCapacity()){
+			park(c,timestamp);
+			return true;
 		}
-		park(c,timestamp);
-		return true;
+
+		return false;
 	}
 
 	/**

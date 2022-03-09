@@ -92,10 +92,12 @@ public class Simulator {
 	 */
 	public void simulate() {
 		this.clock = 0;
+		int sdakl = 0;
 		while (clock<steps){
 			if (RandomGenerator.eventOccurred(probabilityOfArrivalPerSec)){
 				Car car = RandomGenerator.generateRandomCar();
 				incomingQueue.enqueue(new Spot(car,clock));
+				sdakl++;
 			}
 			int i = 0;
 			while (i<lot.getOccupancy()){
@@ -113,7 +115,7 @@ public class Simulator {
 			}
 			if (!incomingQueue.isEmpty()){
 				Spot priority = incomingQueue.peek();
-				if (lot.attemptParking(priority.getCar(), priority.getTimestamp())){
+				if (lot.attemptParking(priority.getCar(), clock)){
 					incomingQueue.dequeue();
 				}
 			}
@@ -122,7 +124,7 @@ public class Simulator {
 			}
 			clock++;
 		}
-
+		System.out.println("number of car generated: "+ sdakl);
 	}
 
 	public int getIncomingQueueSize() {

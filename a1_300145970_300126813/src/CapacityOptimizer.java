@@ -7,12 +7,14 @@ public class CapacityOptimizer {
 		ParkingLot lot = new ParkingLot(1);
 		while (true){
 
-			System.out.println("==== Setting lot capacity to: "+lot.getCapacity()+"====");
+			System.out.println("==== Setting lot capacity to: "+lot.getCapacity()+" ====");
 			int total = 0;
 			for (int i =1;i<NUM_RUNS+1;i++){
 				int incomingQueueSize =0;
 				long start = System.currentTimeMillis();
 
+				int capacity = lot.getCapacity();
+				lot = new ParkingLot(capacity);
 				Simulator simulator = new Simulator(lot,hourlyRate,Simulator.SIMULATION_DURATION);
 				simulator.simulate();
 
