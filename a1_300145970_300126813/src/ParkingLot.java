@@ -27,7 +27,7 @@ public class ParkingLot {
 		if (capacity < 0) {
 		
 			// Hint: throw a suitable exception here.
-			throw new IndexOutOfBoundsException("parking lot must contains spots");
+			throw new IllegalArgumentException("parking lot must contains spots");
 		
 		}
 		this.capacity = capacity;
@@ -44,6 +44,9 @@ public class ParkingLot {
 		if (c==null){
 			throw new NullPointerException("Can not park an empty car");
 		}
+		if (timestamp<0){
+			throw new IllegalArgumentException("timestamp can not be negative");
+		}
 		occupancy.add(new Spot(c,timestamp));
 	}
 
@@ -55,7 +58,7 @@ public class ParkingLot {
 	 */
 	public Spot remove(int i) {
 		if (i>=getOccupancy()|i<0){
-			throw new IndexOutOfBoundsException("Number of car is less than i");
+			throw new IllegalArgumentException("Number of car is less than i");
 		}
 		Spot spot = occupancy.get(i);
 		occupancy.remove(i);
@@ -89,8 +92,8 @@ public class ParkingLot {
 	 * @return the spot instance at a given position (i, j)
 	 */
 	public Spot getSpotAt(int i) {
-		if (i>=getOccupancy()|i<0){
-			throw new IndexOutOfBoundsException("Number of car is less than i");
+		if (i>=getOccupancy() || i<0){
+			throw new IllegalArgumentException("Number of car is less than i");
 		}
 		Spot spot = occupancy.get(i);
 		return spot;

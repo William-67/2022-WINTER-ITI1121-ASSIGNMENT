@@ -71,8 +71,10 @@ public class Simulator {
 	 */
 	public Simulator(ParkingLot lot, int perHourArrivalRate, int steps) {
 		if (lot == null){
-			throw new NullPointerException("Parking lot is null");
+			throw new IllegalArgumentException("Parking lot is null");
 		}
+		if (perHourArrivalRate<0) throw new IllegalArgumentException("perHourArrivalRate can not be negative number");
+		if (steps<0) throw new IllegalArgumentException("steps can not be negative");
 
 		this.lot = lot;
 		this.steps = steps;

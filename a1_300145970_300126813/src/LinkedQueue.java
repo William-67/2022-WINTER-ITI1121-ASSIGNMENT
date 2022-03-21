@@ -25,9 +25,11 @@ public class LinkedQueue<D> implements Queue<D> {
 
 	private Elem<D> front;
 	private Elem<D> rear;
+	private int size;
 
 	public LinkedQueue() {
 		front = rear = null;
+		size = 0;
 	}
 
 	public boolean isEmpty() {
@@ -51,6 +53,7 @@ public class LinkedQueue<D> implements Queue<D> {
 			rear.next = newElem;
 			rear = newElem;
 		}
+		size++;
 	}
 
 	public D dequeue() {
@@ -67,6 +70,7 @@ public class LinkedQueue<D> implements Queue<D> {
 		} else {
 			front = front.next;
 		}
+		size--;
 
 		return returnedValue;
 	}
@@ -79,16 +83,17 @@ public class LinkedQueue<D> implements Queue<D> {
 	}
 
 	public int size() {
-		if (isEmpty()){
-			return 0;
-		}
-		int s = 1;
-		Elem<D> tmp = front;
-		while (tmp.next!=null){
-			s++;
-			tmp = tmp.next;
-		}
-		return s;
+//		if (isEmpty()){
+//			return 0;
+//		}
+//		int s = 1;
+//		Elem<D> tmp = front;
+//		while (tmp.next!=null){
+//			s++;
+//			tmp = tmp.next;
+//		}
+//		return s;
+		return size;
 	}
 
 	public String toString() {

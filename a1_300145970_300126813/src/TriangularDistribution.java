@@ -31,7 +31,7 @@ public class TriangularDistribution {
 		} else {
 		
 			// Hint: throw an appropriate exception here!
-			throw new ArithmeticException(";-;");
+			throw new IllegalArgumentException(";-;");
 	
 		}
 	}
