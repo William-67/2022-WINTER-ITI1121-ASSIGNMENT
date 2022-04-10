@@ -16,13 +16,8 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
 
         //Base and Common case
         E value =iterator.next();
-        if (foundFirst){
-            if (value.equals(toElement)){
-                return 1;
-            }else {
-                return count(fromElement,toElement,iterator,foundFirst)+1;
-            }
-        }else {
+        if (!foundFirst){
+
             if (value.equals(fromElement)){
                 foundFirst = true;
                 if (value.equals(toElement)){
@@ -31,7 +26,14 @@ public class SinglyLinkedList<E> implements List<E>, Iterable<E> {
                     return count(fromElement,toElement,iterator,foundFirst)+1;
                 }
             }else {
-                return count(fromElement,toElement,iterator,foundFirst);
+                return count(fromElement,toElement,iterator, foundFirst);
+            }
+
+        }else {
+            if (value.equals(toElement)){
+                return 1;
+            }else {
+                return count(fromElement,toElement,iterator,foundFirst)+1;
             }
         }
 
